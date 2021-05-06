@@ -1,0 +1,46 @@
+<!doctype html>
+
+<html lang="fr">
+
+  <head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1"
+    >
+
+    <title>WebWelder: Web interface for TouchDesigner</title>
+
+    <link rel="stylesheet" href="styles.css">
+
+    <script type="module">
+      import {Interface} from "./Interface.js";
+      new Interface();
+    </script>
+
+  </head>
+
+  <body>
+
+    <header>
+      <h1>Interface</h1>
+    </header>
+
+    <section id="connection">
+      <label for="url">WebSocket URL</label>
+      <input id="url" type="text" value="ws://localhost:9980">
+      <button>Connect!</button>
+    </section>
+
+    <section>
+      <button id="bouton1">Bouton 1</button>
+      <button id="bouton2">Bouton 2</button>
+    </section>
+
+    <div id="target"></div>
+
+  </body>
+
+</html>
