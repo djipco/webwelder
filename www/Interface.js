@@ -38,6 +38,7 @@ export class Interface {
     this.socket.addEventListener("open", this.onOpen.bind(this));
     this.socket.addEventListener("close", this.onClose.bind(this));
     this.socket.addEventListener("error", this.onError.bind(this));
+    this.socket.addEventListener("message", this.onMessage.bind(this));
 
   }
 
@@ -56,6 +57,11 @@ export class Interface {
     this.connection = false;
     alert("The connection to TouchDesigner could not be established because an error occured.")
     document.querySelector("#connection").style.display = "block";
+  }
+
+  onMessage(e) {
+    const message = JSON.parse(e.data);
+    console.log(message);
   }
 
   onMove(e) {
