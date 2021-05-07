@@ -66,8 +66,8 @@ ww.sendAll(json.dumps({"test": 456})
 
 ## Caveats
 
-To JSON DAT appeared with version 2021.1000. Earlier versions will not be able to use the JSON
-output.
+* The JSON DAT appeared with version 2021.1000 of TouchDesigner. Earlier versions will not be able 
+to use the JSON output.
 
-If the "Stop Playing when Minimized" option is activated in the preferences, the server will stop 
+* If the "Stop Playing when Minimized" option is activated in the preferences, WebWelder will stop 
 working when the TouchDesigner window is minimized.
