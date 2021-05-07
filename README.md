@@ -12,14 +12,14 @@ modify the files in this folder and/or add new ones.
 By default, the demo page will send clicks and touch/mouse positions to TouchDesigner. To try the
 demo page:
 
-1. Drop the WebWelder component in your project.
-2. Put the `www` folder besides the `.toe` file using WebWelder.
+1. Drop the WebWelder component (`WebWelder.tox`) in your project.
+2. Put the `www` folder besides the `.toe` file which is using WebWelder.
 3. Point your browser to `http://localhost:9980` and click "Connect!".
 4. Click and move around to send data to TouchDesigner.
 
 If you want to test the demo page from a device different than the one running TouchDesigner (such
 as a mobile device), you will need to substitute your machine's IP address in the "**WebSocket URL**" 
-input field. For example: `ws://12.123.23.3:9980`
+input field. For example: `ws://12.47.90.3:9980`
 
 ## Using it in JavaScript
 
@@ -38,7 +38,7 @@ socket.addEventListener("open", () => {
 Obviously, if you are trying to connect from a device different from the one where TouchDesigner
 is running, you will need to use your machine's IP address and not `localhost`.
 
-To receive a message sent from TouchDesigner, just add a listener for the "message" event:
+To receive a message sent from TouchDesigner, just add a listener for the `message` event:
 
 ```javascript
 socket.addEventListener("message", e => {
@@ -55,14 +55,25 @@ The WebWelder COMP outputs the received data in both JSON and Table format. You 
 To send data to the clients, you can specify an `Outbound DAT` in the COMP's parameters. This 
 Table DAT must have a column named "client" whose content is the client's ID (e.g. 
 `192.168.1.10:65432`). Whenever a row in this table changes, all the data in the row will be 
-sent to the corresponding client.
+sent to the corresponding client in JSON format.
 
-If you wish to manually send data to a client from Python, you can use this:
+## Python API
+
+The Python API currently offers the following methods:
+
+* `send(client, message)` sends a message to a single client
+* `sendAll(message)` sends a message to all connected clients
+* `disconnect(client)` disconnects the specified client
+* `disconnectAll()` disconnects all clients
+
+So, for example, if you wish to manually send data to a client from Python, you can use this:
 
 ```python
 ww = op('WebWelder/code').module
-ww.sendAll(json.dumps({"test": 456})
+message = {"test": 456}
+ww.sendAll(json.dumps(message))
 ```
+
 
 ## Caveats
 
