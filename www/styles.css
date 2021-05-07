@@ -13,7 +13,7 @@
 }
 
 /* Réactivation des clics sur les éléments qu'on souhaite cliquables */
-#bouton1, #bouton2, body, select {
+#button1, #button2, body, select {
   pointer-events: all;
 }
 
