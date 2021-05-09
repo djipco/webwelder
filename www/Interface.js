@@ -15,13 +15,15 @@ export class Interface {
     this.button = document.querySelector("#connection > button");
     this.button.addEventListener("click", this.onStart.bind(this));
 
-    // Listeners for movement, clicks and touches
-    document.body.addEventListener("touchmove", this.onMove.bind(this));
-    document.body.addEventListener("mousemove", this.onMove.bind(this));
-    document.body.addEventListener("mousedown", this.onClick.bind(this));
-    document.body.addEventListener("mouseup", this.onClick.bind(this));
-    document.body.addEventListener("touchstart", this.onClick.bind(this));
-    document.body.addEventListener("touchend", this.onClick.bind(this));
+    // Listeners for movement
+    document.getElementById("touchzone").addEventListener("touchmove", this.onMove.bind(this));
+    document.getElementById("touchzone").addEventListener("mousemove", this.onMove.bind(this));
+    
+    // Listeners for clicks and touches
+    document.body.addEventListener("mousedown", this.onClick.bind(this), true);
+    document.body.addEventListener("mouseup", this.onClick.bind(this), true);
+    document.body.addEventListener("touchstart", this.onClick.bind(this), true);
+    document.body.addEventListener("touchend", this.onClick.bind(this), true);
 
   }
 
@@ -30,7 +32,7 @@ export class Interface {
     // Hide fields while connecting
     document.querySelector("#connection").style.display = "none";
 
-    // Attempt to connect to WebSocket server
+    // Attempt to connect to TouchDesigner
     let url = document.getElementById("url").value;
     this.socket = new WebSocket(url);
 
@@ -66,16 +68,28 @@ export class Interface {
 
   onMove(e) {
 
+    const rect = e.target.getBoundingClientRect();
+    const pos = {x: 0, y: 0};
+
     // Adapt to type of movement (clicks vs. touches)
     if (e.type === "mousemove") {
-      this.message.x = e.clientX / window.innerWidth;
-      this.message.y = - (e.clientY / window.innerHeight);
-      this.moveTarget(e.clientX, e.clientY)
+      pos.x = e.clientX - rect.left;
+      pos.y = e.clientY - rect.top;
     } else if (e.type === "touchmove") {
-      this.message.x = e.touches[0].clientX / window.innerWidth;
-      this.message.y = - (e.touches[0].clientY / window.innerHeight);
-      this.moveTarget(e.touches[0].clientX, e.touches[0].clientY)
+      pos.x = e.touches[0].clientX - rect.left;
+      pos.y = e.touches[0].clientY - rect.top;
     }
+    
+    // Constrain to container
+    pos.x = Math.min(rect.width, Math.max(0, pos.x));
+    pos.y = Math.min(rect.height, Math.max(0, pos.y));
+
+    // Mpve orange circle
+    this.moveTarget(pos.x, pos.y);
+
+    // Make relative and flip y for TouchDesigner
+    this.message.x = pos.x / rect.width;
+    this.message.y = - pos.y / rect.height
 
     // Send JSON message
     if (this.connection) {
@@ -85,9 +99,13 @@ export class Interface {
   }
 
   onClick(e) {
+    
+    // Check if the element has been setup to trigger events
+    const el = e.target;
+    if (!el.hasAttribute("data-webwelder")) return;
 
-    // Find name of clicked target
-    let name = e.target.id || e.target.classList[0] || e.target.localName;
+    // Get a suitable name for clicked element
+    let name = el.dataset.webwelder || el.id || el.classList[0] || el.localName;
 
     // Add button status to message
     if (e.type === "mousedown" || e.type === "touchstart") {
@@ -95,9 +113,6 @@ export class Interface {
     } else if (e.type === "mouseup" || e.type === "touchend") {
       this.message[name] = 0;
     }
-
-    // Adjust target opacity to get local feedback
-    this.target.style.opacity = this.message[name] ? "1" : "0.6";
 
     // Send JSON message
     if (this.connection) {

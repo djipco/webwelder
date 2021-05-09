@@ -1,86 +1,68 @@
-* {
-
-  /* Désactivation des clics (réactivé plus bas où c'est nécessaire) */
-  pointer-events: none;
-  
-  /* Désactivation de la sélection du texte des boutons */
-  user-select: none;
-  -webkit-user-select: none;
-  -khtml-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-
-}
-
-/* Réactivation des clics sur les éléments qu'on souhaite cliquables */
-#button1, #button2, body, select {
-  pointer-events: all;
-}
-
-/* Désactivation du zoom sur les appareils mobiles */
+/* Deactivate zoom on mobile */
 :root {
   touch-action: pan-x pan-y;
   height: 100% 
 }
 
 html {
-  height: 90vh;
+  height: 100%;
+  padding: 5%;
   overflow: hidden;
-  padding: 5vh 7.5vw 5vh 7.5vw;
+  background-color: black;
 }
 
 body {
+  margin: 0;
+  height: 95%;
   overflow: hidden;
-  background-color: black;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
   color: white;
   font-size: 20px;
   font-family: sans-serif;
-  margin: 0;
-  height: 90vh;
-  text-align: center;
 }
 
 section, header {
   border: 2px darkgray solid;
   border-radius: 10px;
-  padding: 0.25em;
   margin-bottom: 1em;
+}
+
+#touchzone {
+  flex-grow: 1;
+  position: relative;
+  overflow: hidden;
 }
 
 #target {
   background-color: orange;
   position: absolute;
-  top: calc(70%);
-  left: calc(50% - 25px);
+  top: calc(50% - 20px);
+  left: calc(50% - 20px);
   border-radius: 50%;
-  width: 50px;
-  height: 50px;
-  opacity: 0.6;
+  width: 40px;
+  height: 40px;
+  z-index: -1;
+}
+
+#buttons {
+  margin-bottom: 0;
 }
 
 input {
   width: 85%;
   max-width: 500px;
   font-size: 20px;
-  pointer-events: all;
 }
 
 button {
   margin: 0.5em auto;
   font-size: 20px;
-  pointer-events: all;
   padding: 0.25em 0.5em 0.25em 0.5em;
 }
 
 label {
   display: block;
   margin: 1em auto 0.5em auto;
-}
-
-select {
-  display: block;
-  margin: 0 auto;
-  width: 80%;
-  max-width: 300px;
-  font-size: 1em;
 }
