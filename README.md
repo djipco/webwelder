@@ -5,8 +5,8 @@ WebSocket messaging. It is **still in alpha** but works relatively well.
 
 ## Trying Out the Demo Files
 
-Demo files can be found in the `www` folder. These will help you get started. By default, the 
-`www` folder is hosted by TouchDesigner, which acts as a regular web server. Obviously, you can
+Demo files can be found in the `www` folder. These will help you get started. The `www` folder is 
+meant to be hosted by TouchDesigner, which acts as a regular web server. Obviously, you can
 modify the files in this folder and/or add new ones.
 
 By default, the demo page will send clicks and touch/mouse positions to TouchDesigner. To try the
@@ -55,7 +55,7 @@ The WebWelder COMP outputs the received data in both JSON and Table format. You 
 To send data to the clients, you can specify an `Outbound DAT` in the COMP's parameters. This 
 Table DAT must have a column named "client" whose content is the client's ID (e.g. 
 `192.168.1.10:65432`). Whenever a row in this table changes, all the data in the row will be 
-sent to the corresponding client in JSON format.
+sent to the corresponding client (in JSON format).
 
 ## Python API
 
