@@ -5,15 +5,15 @@
 }
 
 html {
-  height: 100%;
-  padding: 5%;
+  height: 100vh;
+  padding: 5vh 5vw;
   overflow: hidden;
   background-color: black;
 }
 
 body {
   margin: 0;
-  height: 95%;
+  height: 90vh;
   overflow: hidden;
   display: flex;
   flex-direction: column;

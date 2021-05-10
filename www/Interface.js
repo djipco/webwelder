@@ -100,19 +100,31 @@ export class Interface {
 
   onClick(e) {
     
-    // Check if the element has been setup to trigger events
-    const el = e.target;
-    if (!el.hasAttribute("data-webwelder")) return;
+    let matches = [];
 
-    // Get a suitable name for clicked element
-    let name = el.dataset.webwelder || el.id || el.classList[0] || el.localName;
+    // Find all elements in the hierarchy that have the "data-webwelder" attribute
+    e.path.forEach(el => {
 
-    // Add button status to message
-    if (e.type === "mousedown" || e.type === "touchstart") {
-      this.message[name] = 1;
-    } else if (e.type === "mouseup" || e.type === "touchend") {
-      this.message[name] = 0;
-    }
+      if (el.hasAttribute && el.hasAttribute("data-webwelder")) {
+
+        // Get a suitable name for the clicked element and add it to array
+        const name = el.dataset.webwelder || el.id || el.classList[0] || el.localName;
+        matches.push(name);
+
+      }
+
+    });
+    
+    matches.forEach(match => {
+
+      // Add button status to message
+      if (e.type === "mousedown" || e.type === "touchstart") {
+        this.message[match] = 1;
+      } else if (e.type === "mouseup" || e.type === "touchend") {
+        this.message[match] = 0;
+      }
+
+    })
 
     // Send JSON message
     if (this.connection) {
