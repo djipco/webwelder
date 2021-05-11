@@ -19,7 +19,7 @@ demo page:
 
 If you want to test the demo page from a device different than the one running TouchDesigner (such
 as a mobile device), you will need to substitute your machine's IP address in the "**WebSocket URL**" 
-input field. For example: `ws://12.47.90.3:9980`
+input field of the `index.html` page. For example: `ws://12.47.90.3:9980`
 
 ## Using it in JavaScript
 
