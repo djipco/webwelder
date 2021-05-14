@@ -69,7 +69,7 @@ The Python API currently offers the following methods:
 So, for example, if you wish to manually send data to a client from Python, you can use this:
 
 ```python
-ww = op('WebWelder/code').module
+ww = op('WebWelder/api').module
 message = {"test": 456}
 ww.sendAll(json.dumps(message))
 ```
