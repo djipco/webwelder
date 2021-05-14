@@ -66,16 +66,20 @@ sent to the corresponding client (in JSON format).
 
 ### Methods
 
-* `Send(client, message)` sends a message to a single client
+* `Send(client, message)` : sends a message to a single client
+  * `client` : the client id to send to (e.g. 127.0.0.1:12345)
+  *  `message` : a dictionary (will be parsed to JSON)
 * `SendAll(message)` sends a message to all connected clients
+  *  `message` : a dictionary (will be parsed to JSON)
 * `Disconnect(client)` disconnects the specified client
+  * `client` : the client id to send to (e.g. 127.0.0.1:12345)
 * `DisconnectAll()` disconnects all clients
 
 So, for example, if you wish to manually send data to a client from Python, you can use this:
 
 ```python
 message = {"test": 456}
-op('WebWelder').SendAll(json.dumps(message))
+op('WebWelder').SendAll(message)
 ```
 
 
