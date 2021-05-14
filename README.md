@@ -61,10 +61,10 @@ sent to the corresponding client (in JSON format).
 
 The Python API currently offers the following methods:
 
-* `send(client, message)` sends a message to a single client
-* `sendAll(message)` sends a message to all connected clients
-* `disconnect(client)` disconnects the specified client
-* `disconnectAll()` disconnects all clients
+* `Send(client, message)` sends a message to a single client
+* `SendAll(message)` sends a message to all connected clients
+* `Disconnect(client)` disconnects the specified client
+* `DisconnectAll()` disconnects all clients
 
 So, for example, if you wish to manually send data to a client from Python, you can use this:
 
