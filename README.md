@@ -1,4 +1,4 @@
-# WebWelder
+# WebWelder 1.0.0-alpha.3
  
 WebWelder is a TouchDesigner component (.tox) allowing 2-way interaction with a web page via 
 WebSocket messaging. It is **still in alpha** but works relatively well. 
