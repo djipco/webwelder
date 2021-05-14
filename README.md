@@ -59,7 +59,11 @@ sent to the corresponding client (in JSON format).
 
 ## Python API
 
-The Python API currently offers the following methods:
+### Members
+
+* `InboundTable` : a Table DAT containing messages received from clients
+
+### Methods
 
 * `Send(client, message)` sends a message to a single client
 * `SendAll(message)` sends a message to all connected clients
