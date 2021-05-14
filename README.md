@@ -61,7 +61,8 @@ sent to the corresponding client (in JSON format).
 
 ### Members
 
-* `InboundTable` : a Table DAT containing messages received from clients
+* `InboundTableDat` : a Table DAT containing all clients and current properties
+* `InboundJsonDat` : a JSON DAT containing all clients and current properties
 
 ### Methods
 
