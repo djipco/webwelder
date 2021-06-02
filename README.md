@@ -49,13 +49,21 @@ socket.addEventListener("message", e => {
 
 ## Using it in TouchDesigner
 
-The WebWelder COMP outputs the received data in both JSON and Table format. You can check out 
-`Example.xx.toe` for usage examples. 
+### Receiving data
 
-To send data to the clients, you can specify an `Outbound DAT` in the COMP's parameters. This 
-Table DAT must have a column named "client" whose content is the client's ID (e.g. 
-`192.168.1.10:65432`). Whenever a row in this table changes, all the data in the row will be 
-sent to the corresponding client (in JSON format).
+The WebWelder COMP operator makes the received data available in both JSON (output 1) and Table 
+(output 2) format. It also reports the number of currently connected client through output 0. 
+You can check out `Example.xx.toe` for usage examples. 
+
+### Sending data
+
+To send data from TouchDesigner to the clients, you can specify an `Outbound DAT` in the COMP's 
+parameters. This Table DAT must have a column named "client" whose content is the client's ID 
+(e.g. `192.168.1.10:65432`). Whenever a row in this table changes, all the data in the row will 
+be sent to the corresponding client (in JSON format).
+
+To send data to all connected client, you can update all rows in the specified `Outbound DAT` 
+table or you can use the Python API (see below).
 
 ## Python API
 
@@ -75,7 +83,8 @@ sent to the corresponding client (in JSON format).
   * `client` : the client id to send to (e.g. 127.0.0.1:12345)
 * `DisconnectAll()` disconnects all clients
 
-So, for example, if you wish to manually send data to a client from Python, you can use this:
+So, for example, if you wish to manually send data to all connected clients from Python, you can 
+use this:
 
 ```python
 message = {"test": 456}
