@@ -2,24 +2,28 @@ export class Interface {
 
   constructor() {
 
-    // Message object that will be sent to server as JSON
+    // Create message object that will be sent to server after JSON serialization
     this.message = {};
 
-    // Connection state
+    // Set default connection state
     this.connection = false;
 
-    // Orange target that follows the cursor
+    // Get orange target that follows the cursor
     this.target = document.getElementById("target");
 
-    // Connect button & its click listener
+    // Assign click listener to connection button
     this.button = document.querySelector("#connection > button");
     this.button.addEventListener("click", this.onStart.bind(this));
 
-    // Listeners for movement
+    // Get WebSocket URL input field and assign default value
+    this.input = document.getElementById("url")
+    this.input.value = window.location.href.replace(/^http(s)?:\/\//i, "ws$1://");
+
+    // Assign listeners for movement
     document.getElementById("touchzone").addEventListener("touchmove", this.onMove.bind(this));
     document.getElementById("touchzone").addEventListener("mousemove", this.onMove.bind(this));
     
-    // Listeners for clicks and touches
+    // Assign listeners for clicks and touches
     document.body.addEventListener("mousedown", this.onClick.bind(this), true);
     document.body.addEventListener("mouseup", this.onClick.bind(this), true);
     document.body.addEventListener("touchstart", this.onClick.bind(this), true);
@@ -29,12 +33,11 @@ export class Interface {
 
   onStart() {
 
-    // Hide fields while connecting
+    // Hide connection fields while connecting
     document.querySelector("#connection").style.display = "none";
 
-    // Attempt to connect to TouchDesigner
-    let url = document.getElementById("url").value;
-    this.socket = new WebSocket(url);
+    // Attempt to connect to TouchDesigner via WebSocket
+    this.socket = new WebSocket(this.input.value);
 
     // Add listeners to the socket
     this.socket.addEventListener("open", this.onOpen.bind(this));
@@ -84,7 +87,7 @@ export class Interface {
     pos.x = Math.min(rect.width, Math.max(0, pos.x));
     pos.y = Math.min(rect.height, Math.max(0, pos.y));
 
-    // Mpve orange circle
+    // Move orange circle
     this.moveTarget(pos.x, pos.y);
 
     // Make relative and flip y for TouchDesigner
