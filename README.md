@@ -75,12 +75,12 @@ table or you can use the Python API (see below).
 ### Methods
 
 * `Send(client, message)` : sends a message to a single client
-  * `client` : the client id to send to (e.g. 127.0.0.1:12345)
+  * `client` : the client id to send to (e.g. `127.0.0.1:12345`)
   *  `message` : a dictionary (will be parsed to JSON)
 * `SendAll(message)` sends a message to all connected clients
   *  `message` : a dictionary (will be parsed to JSON)
 * `Disconnect(client)` disconnects the specified client
-  * `client` : the client id to send to (e.g. 127.0.0.1:12345)
+  * `client` : the client id to send disconnect (e.g. `127.0.0.1:12345`)
 * `DisconnectAll()` disconnects all clients
 
 So, for example, if you wish to manually send data to all connected clients from Python, you can 
