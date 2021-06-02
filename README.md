@@ -6,8 +6,8 @@ WebSocket messaging. It is **still in alpha** but works relatively well.
 ## Trying Out the Demo Files
 
 Demo files can be found in the `www` folder. These will help you get started. The `www` folder is 
-meant to be hosted by TouchDesigner, which acts as a regular web server. Obviously, you can
-modify the files in this folder and/or add new ones.
+meant to be hosted by TouchDesigner, which doubles as both a regular web server and a WebSocket 
+server. Obviously, you can modify the files in this folder and/or add new ones.
 
 By default, the demo page will send clicks and touch/mouse positions to TouchDesigner. To try the
 demo page:
@@ -18,8 +18,8 @@ demo page:
 4. Click and move around to send data to TouchDesigner.
 
 If you want to test the demo page from a device different than the one running TouchDesigner (such
-as a mobile device), you will need to substitute your machine's IP address in the "**WebSocket URL**" 
-input field of the `index.html` page. For example: `ws://12.47.90.3:9980`
+as a mobile device), you will need to point your mobile browser to the IP address of the machine 
+where TouchDesigner is running.
 
 ## Using it in JavaScript
 
@@ -27,7 +27,7 @@ As you can see in the demo `Interface.js` file, you can connect to TouchDesigner
 by simply opening a WebSocket connection and sending some JSON data through it:
 
 ```javascript
-const socket = new WebSocket("localhost:9980");
+const socket = new WebSocket("ws://localhost:9980");
 
 socket.addEventListener("open", () => {
  console.log("Connection established!");
@@ -50,7 +50,7 @@ socket.addEventListener("message", e => {
 ## Using it in TouchDesigner
 
 The WebWelder COMP outputs the received data in both JSON and Table format. You can check out 
-`Example.xx.toe` for examples. 
+`Example.xx.toe` for usage examples. 
 
 To send data to the clients, you can specify an `Outbound DAT` in the COMP's parameters. This 
 Table DAT must have a column named "client" whose content is the client's ID (e.g. 
@@ -82,8 +82,12 @@ message = {"test": 456}
 op('WebWelder').SendAll(message)
 ```
 
+## SSL/TLS
 
-## Caveats
+The library also works under the secured **https://** and **wss://** protocols. You just need to 
+specify the appropriate key and certificate files (in the component's parameters).
+
+## Debugging & Caveats
 
 * The JSON DAT appeared with version 2021.1000 of TouchDesigner. Earlier versions will not be able 
 to use the JSON output.
