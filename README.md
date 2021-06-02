@@ -103,3 +103,12 @@ to use the JSON output.
 
 * If the "Stop Playing when Minimized" option is activated in the preferences, WebWelder will stop 
 working when the TouchDesigner window is minimized.
+
+## Citing this Software in Research
+
+If you use this software for research or academic purposes, please cite the project in your 
+references (or wherever appropriate). Here's an example of how to cite it 
+([APA Style](https://apastyle.apa.org/)):
+
+>Côté, J. P. (2021). WebWelder v1.0.0-alpha.3 [Computer Software]. Retrieved from 
+https://github.com/djipco/webwelder
