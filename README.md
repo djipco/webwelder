@@ -6,8 +6,8 @@ WebSocket messaging. It is **still in alpha** but works relatively well.
 ## Trying Out the Demo Files
 
 Demo files can be found in the `www` folder. These will help you get started. The `www` folder is 
-meant to be hosted by TouchDesigner, which acts as a regular web server. Obviously, you can
-modify the files in this folder and/or add new ones.
+meant to be hosted by TouchDesigner, which doubles as both a regular web server and a WebSocket 
+server. Obviously, you can modify the files in this folder and/or add new ones.
 
 By default, the demo page will send clicks and touch/mouse positions to TouchDesigner. To try the
 demo page:
@@ -18,8 +18,8 @@ demo page:
 4. Click and move around to send data to TouchDesigner.
 
 If you want to test the demo page from a device different than the one running TouchDesigner (such
-as a mobile device), you will need to substitute your machine's IP address in the "**WebSocket URL**" 
-input field of the `index.html` page. For example: `ws://12.47.90.3:9980`
+as a mobile device), you will need to point your mobile browser to the IP address of the machine 
+where TouchDesigner is running.
 
 ## Using it in JavaScript
 
@@ -27,7 +27,7 @@ As you can see in the demo `Interface.js` file, you can connect to TouchDesigner
 by simply opening a WebSocket connection and sending some JSON data through it:
 
 ```javascript
-const socket = new WebSocket("localhost:9980");
+const socket = new WebSocket("ws://localhost:9980");
 
 socket.addEventListener("open", () => {
  console.log("Connection established!");
@@ -49,13 +49,21 @@ socket.addEventListener("message", e => {
 
 ## Using it in TouchDesigner
 
-The WebWelder COMP outputs the received data in both JSON and Table format. You can check out 
-`Example.xx.toe` for examples. 
+### Receiving data
 
-To send data to the clients, you can specify an `Outbound DAT` in the COMP's parameters. This 
-Table DAT must have a column named "client" whose content is the client's ID (e.g. 
-`192.168.1.10:65432`). Whenever a row in this table changes, all the data in the row will be 
-sent to the corresponding client (in JSON format).
+The WebWelder COMP operator makes the received data available in both JSON (output 1) and Table 
+(output 2) format. It also reports the number of currently connected client through output 0. 
+You can check out `Example.xx.toe` for usage examples. 
+
+### Sending data
+
+To send data from TouchDesigner to the clients, you can specify an `Outbound DAT` in the COMP's 
+parameters. This Table DAT must have a column named "client" whose content is the client's ID 
+(e.g. `192.168.1.10:65432`). Whenever a row in this table changes, all the data in the row will 
+be sent to the corresponding client (in JSON format).
+
+To send data to all connected client, you can update all rows in the specified `Outbound DAT` 
+table or you can use the Python API (see below).
 
 ## Python API
 
@@ -67,26 +75,40 @@ sent to the corresponding client (in JSON format).
 ### Methods
 
 * `Send(client, message)` : sends a message to a single client
-  * `client` : the client id to send to (e.g. 127.0.0.1:12345)
+  * `client` : the client id to send to (e.g. `127.0.0.1:12345`)
   *  `message` : a dictionary (will be parsed to JSON)
 * `SendAll(message)` sends a message to all connected clients
   *  `message` : a dictionary (will be parsed to JSON)
 * `Disconnect(client)` disconnects the specified client
-  * `client` : the client id to send to (e.g. 127.0.0.1:12345)
+  * `client` : the client id to disconnect (e.g. `127.0.0.1:12345`)
 * `DisconnectAll()` disconnects all clients
 
-So, for example, if you wish to manually send data to a client from Python, you can use this:
+So, for example, if you wish to manually send data to all connected clients from Python, you can 
+use this:
 
 ```python
 message = {"test": 456}
 op('WebWelder').SendAll(message)
 ```
 
+## SSL/TLS
 
-## Caveats
+The library also works under the secured **https://** and **wss://** protocols. You just need to 
+specify the appropriate key and certificate files (in the component's parameters).
+
+## Debugging & Caveats
 
 * The JSON DAT appeared with version 2021.1000 of TouchDesigner. Earlier versions will not be able 
 to use the JSON output.
 
 * If the "Stop Playing when Minimized" option is activated in the preferences, WebWelder will stop 
 working when the TouchDesigner window is minimized.
+
+## Citing this Software in Research
+
+If you use this software for research or academic purposes, please cite the project in your 
+references (or wherever appropriate). Here's an example of how to cite it 
+([APA Style](https://apastyle.apa.org/)):
+
+>Côté, J. P. (2021). WebWelder v1.0.0-alpha.3 [Computer Software]. Retrieved from 
+https://github.com/djipco/webwelder
