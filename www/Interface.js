@@ -15,7 +15,7 @@ export class Interface {
     this.button = document.querySelector("#connection > button");
     this.button.addEventListener("click", this.onStart.bind(this));
 
-    // Get WebSocket URL input field and assign default value
+    // Get WebSocket URL input field and assign default value (derived from url)
     this.input = document.getElementById("url")
     this.input.value = window.location.href.replace(/^http(s)?:\/\//i, "ws$1://");
 
@@ -48,20 +48,41 @@ export class Interface {
   }
 
   onOpen(e) {
+
     this.connection = true;
     console.info(`The connection to TouchDesigner has been established (${e.target.url}`);
+
+    // Show touch zone and buttons
+    document.querySelector("#touchzone").style.display = "block";
+    document.querySelector("#buttons").style.display = "block";
+
   }
 
   onClose() {
+
     this.connection = false;
-    alert("The connection to the server has been closed.")
     document.querySelector("#connection").style.display = "block";
+    
+    // Hide touch zone and buttons
+    document.querySelector("#touchzone").style.display = "none";
+    document.querySelector("#buttons").style.display = "none";
+    
+    alert("The connection to the server has been closed.")
+
   }
 
   onError() {
     this.connection = false;
-    alert("The connection to TouchDesigner could not be established because an error occured.")
+    
+    // Show connection fields
     document.querySelector("#connection").style.display = "block";
+    
+    // Hide touch zone and buttons
+    document.querySelector("#touchzone").style.display = "none";
+    document.querySelector("#buttons").style.display = "none";
+    
+    alert("The connection to TouchDesigner could not be established because an error occured.")
+
   }
 
   onMessage(e) {

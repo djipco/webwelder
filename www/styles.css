@@ -33,6 +33,7 @@ section, header {
   flex-grow: 1;
   position: relative;
   overflow: hidden;
+  display: none;
 }
 
 #target {
@@ -48,6 +49,7 @@ section, header {
 
 #buttons {
   margin-bottom: 0;
+  display: none;
 }
 
 input {
