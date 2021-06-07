@@ -5,83 +5,89 @@ export class Interface {
     // Create message object that will be sent to server after JSON serialization
     this.message = {};
 
-    // Set default connection state
-    this.connection = false;
-
-    // Get orange target that follows the cursor
-    this.target = document.getElementById("target");
-
-    // Assign click listener to connection button
-    this.button = document.querySelector("#connection > button");
-    this.button.addEventListener("click", this.onStart.bind(this));
+    // Objects containing reference to all listener functions (for eventual removal)
+    this.listeners = {};
 
     // Get WebSocket URL input field and assign default value (derived from url)
-    this.input = document.getElementById("url")
-    this.input.value = window.location.href.replace(/^http(s)?:\/\//i, "ws$1://");
+    const webSocketInput = document.getElementById("url");
+    webSocketInput.value = window.location.href.replace(/^http(s)?:\/\//i, "ws$1://");
 
-    // Assign listeners for movement
-    document.getElementById("touchzone").addEventListener("touchmove", this.onMove.bind(this));
-    document.getElementById("touchzone").addEventListener("mousemove", this.onMove.bind(this));
-    
-    // Assign listeners for clicks and touches
-    document.body.addEventListener("mousedown", this.onClick.bind(this), true);
-    document.body.addEventListener("mouseup", this.onClick.bind(this), true);
-    document.body.addEventListener("touchstart", this.onClick.bind(this), true);
-    document.body.addEventListener("touchend", this.onClick.bind(this), true);
+    // Assign click listener to the "Connect!" button
+    this.connectButton = document.querySelector("#connection > button");
+    this.listeners.onConnect = this.onConnect.bind(this);
+    this.connectButton.addEventListener("click", this.listeners.onConnect);
 
   }
 
-  onStart() {
+  onConnect() {
 
     // Hide connection fields while connecting
     document.querySelector("#connection").style.display = "none";
 
     // Attempt to connect to TouchDesigner via WebSocket
-    this.socket = new WebSocket(this.input.value);
+    this.socket = new WebSocket(document.getElementById("url").value);
 
-    // Add listeners to the socket
-    this.socket.addEventListener("open", this.onOpen.bind(this));
-    this.socket.addEventListener("close", this.onClose.bind(this));
-    this.socket.addEventListener("error", this.onError.bind(this));
-    this.socket.addEventListener("message", this.onMessage.bind(this));
+    // Add listeners on the socket
+    this.addSockeListeners();
 
   }
 
   onOpen(e) {
 
-    this.connection = true;
     console.info(`The connection to TouchDesigner has been established (${e.target.url}`);
 
-    // Show touch zone and buttons
-    document.querySelector("#touchzone").style.display = "block";
-    document.querySelector("#buttons").style.display = "block";
+    // Add listeners for interactive elements
+    this.addInteractionListeners();
+
+    // Show interactive elements
+    document.querySelector("#touch-zone").style.display = "block";
+    document.querySelector("#button-zone").style.display = "block";
+    document.querySelector("#text-zone").style.display = "block";
 
   }
 
   onClose() {
 
-    this.connection = false;
+    // Remove listeners
+    this.removeSockeListeners();
+    this.removeInteractionListeners();
+
+    // Display connection section
     document.querySelector("#connection").style.display = "block";
     
-    // Hide touch zone and buttons
-    document.querySelector("#touchzone").style.display = "none";
-    document.querySelector("#buttons").style.display = "none";
+    // Hide interactive elements
+    document.querySelector("#touch-zone").style.display = "none";
+    document.querySelector("#button-zone").style.display = "none";
+    document.querySelector("#text-zone").style.display = "none";
     
     alert("The connection to the server has been closed.")
 
   }
 
   onError() {
-    this.connection = false;
     
-    // Show connection fields
+    // Remove listeners
+    this.removeSockeListeners();
+    this.removeInteractionListeners();
+
+    // Show connection section
     document.querySelector("#connection").style.display = "block";
     
-    // Hide touch zone and buttons
-    document.querySelector("#touchzone").style.display = "none";
-    document.querySelector("#buttons").style.display = "none";
+    // Hide communication elements
+    document.querySelector("#touch-zone").style.display = "none";
+    document.querySelector("#button-zone").style.display = "none";
+    document.querySelector("#text-zone").style.display = "none";
     
     alert("The connection to TouchDesigner could not be established because an error occured.")
+
+  }
+
+  onSendText() {
+
+    this.message.text = document.getElementById("text").value;
+
+    // Send JSON message
+    this.socket.send(JSON.stringify(this.message));
 
   }
 
@@ -116,9 +122,7 @@ export class Interface {
     this.message.y = - pos.y / rect.height
 
     // Send JSON message
-    if (this.connection) {
-      this.socket.send(JSON.stringify(this.message));
-    }
+    this.socket.send(JSON.stringify(this.message));
 
   }
 
@@ -151,15 +155,74 @@ export class Interface {
     })
 
     // Send JSON message
-    if (this.connection) {
-      this.socket.send(JSON.stringify(this.message));
-    }
+    this.socket.send(JSON.stringify(this.message));
 
   }
 
+  addSockeListeners() {
+    this.listeners.onOpen = this.onOpen.bind(this);
+    this.socket.addEventListener("open", this.listeners.onOpen);
+    this.listeners.onClose = this.onClose.bind(this);
+    this.socket.addEventListener("close", this.listeners.onClose);
+    this.listeners.onError = this.onError.bind(this);
+    this.socket.addEventListener("error", this.listeners.onError);
+    this.listeners.onMessage = this.onMessage.bind(this);
+    this.socket.addEventListener("message", this.listeners.onMessage);
+  }
+
+  removeSockeListeners() {
+    this.socket.removeEventListener("open", this.listeners.onOpen);
+    this.socket.removeEventListener("close", this.listeners.onClose);
+    this.socket.removeEventListener("error", this.listeners.onError);
+    this.socket.removeEventListener("message", this.listeners.onMessage);
+  }
+
+  addInteractionListeners() {
+
+    // Assign listeners for movement
+    this.listeners.onMove = this.onMove.bind(this);
+    document.getElementById("touch-zone").addEventListener("touchmove", this.listeners.onMove);
+    document.getElementById("touch-zone").addEventListener("mousemove", this.listeners.onMove);
+    
+    // Assign listeners for clicks and touches
+    this.listeners.onClick = this.onClick.bind(this);
+    document.body.addEventListener("mousedown", this.listeners.onClick, true);
+    document.body.addEventListener("mouseup", this.listeners.onClick, true);
+    document.body.addEventListener("touchstart", this.listeners.onClick, true);
+    document.body.addEventListener("touchend", this.listeners.onClick, true);
+    
+    // Assign click listener to the "Send Text" button
+    this.listeners.onSendText = this.onSendText.bind(this);
+    this.sendTextbutton = document.querySelector("#text-zone > button");
+    this.sendTextbutton.addEventListener("click", this.listeners.onSendText);
+    
+  }
+
+  removeInteractionListeners() {
+
+    // Remove listeners for movement
+    document.getElementById("touch-zone").removeEventListener("touchmove", this.listeners.onMove);
+    document.getElementById("touch-zone").removeEventListener("mousemove", this.listeners.onMove);
+    
+    // Remove listeners for clicks and touches
+    document.body.removeEventListener("mousedown", this.listeners.onClick, true);
+    document.body.removeEventListener("mouseup", this.listeners.onClick, true);
+    document.body.removeEventListener("touchstart", this.listeners.onClick, true);
+    document.body.removeEventListener("touchend", this.listeners.onClick, true);
+    
+    // Remove click listener to the "Send Text" button
+    this.sendTextbutton = document.querySelector("#text-zone > button");
+    this.sendTextbutton.removeEventListener("click", this.listeners.onSendText);
+    
+  }
+
   moveTarget(x, y) {
-    this.target.style.left = (x - this.target.offsetWidth / 2) + "px"
-    this.target.style.top = (y - this.target.offsetHeight / 2) + "px";
+    
+    // Get orange target that follows the cursor
+    let target = document.getElementById("target");
+    target.style.left = (x - target.offsetWidth / 2) + "px"
+    target.style.top = (y - target.offsetHeight / 2) + "px";
+  
   }
 
 }

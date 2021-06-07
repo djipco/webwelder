@@ -24,9 +24,9 @@
 
   <body data-webwelder>
 
-    <header>
+    <section>
       <h1>Interface</h1>
-    </header>
+    </section>
 
     <section id="connection">
       <label for="url">WebSocket URL</label>
@@ -34,11 +34,17 @@
       <button>Connect!</button>
     </section>
 
-    <section id="touchzone" data-webwelder>
+    <section id="touch-zone" data-webwelder>
       <div id="target"></div>
     </section>
 
-    <section id="buttons">
+    <section id="text-zone">
+      <label for="url">Text To Send:</label>
+      <input id="text" type="text" value="" placeholder="Enter some text...">
+      <button>Send Text!</button>
+    </section>
+
+    <section id="button-zone">
       <button id="button1" data-webwelder="button1">Button 1</button>
       <button id="button2" data-webwelder="button2">Button 2</button>
     </section>

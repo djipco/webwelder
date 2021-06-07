@@ -23,13 +23,13 @@ body {
   font-family: sans-serif;
 }
 
-section, header {
+section {
   border: 2px darkgray solid;
   border-radius: 10px;
   margin-bottom: 1em;
 }
 
-#touchzone {
+#touch-zone {
   flex-grow: 1;
   position: relative;
   overflow: hidden;
@@ -47,8 +47,12 @@ section, header {
   z-index: -1;
 }
 
-#buttons {
+#button-zone {
   margin-bottom: 0;
+  display: none;
+}
+
+#text-zone {
   display: none;
 }
 
