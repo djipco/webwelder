@@ -112,7 +112,8 @@ Earlier versions will not be able to use the JSON output.
 working when the TouchDesigner window is minimized.
 
 * If the connection between client and server goes through a firewall, TCP port 9980 will need to be 
-open. You can also try to change the port to 80 which is often allowed to let web traffic pass.
+open. You can also try to change the port to 80 which is often allowed by default to let web traffic 
+pass through.
 
 ## Citing this Software in Research
 
