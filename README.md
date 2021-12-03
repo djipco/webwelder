@@ -1,6 +1,6 @@
 # WebWelder 1.0.0-alpha.3
  
-WebWelder is a TouchDesigner component (.tox) allowing 2-way interaction with a web page via 
+WebWelder is a TouchDesigner component (.tox) allowing 2-way communication with a web page via 
 WebSocket messaging. It is **still in alpha** but works relatively well. 
 
 ## Trying Out the Demo Files
@@ -96,13 +96,23 @@ op('WebWelder').SendAll(message)
 The library also works under the secured **https://** and **wss://** protocols. You just need to 
 specify the appropriate key and certificate files (in the component's parameters).
 
+This is necessary with some web APIs such as the interfaces made available by the 
+[Sensor API](https://developer.mozilla.org/en-US/docs/Web/API/Sensor_APIs) family 
+([AbsoluteOrientationSensor](https://developer.mozilla.org/en-US/docs/Web/API/AbsoluteOrientationSensor),
+[AmbientLightSensor](https://developer.mozilla.org/en-US/docs/Web/API/AmbientLightSensor),
+[Gyroscope](https://developer.mozilla.org/en-US/docs/Web/API/Gyroscope), etc.).
+
+
 ## Debugging & Caveats
 
-* The JSON DAT appeared with version 2021.1000 of TouchDesigner. Earlier versions will not be able 
-to use the JSON output.
+* The [JSON DAT](https://docs.derivative.ca/JSON_DAT) appeared with version 2021.1000 of TouchDesigner. 
+Earlier versions will not be able to use the JSON output.
 
 * If the "Stop Playing when Minimized" option is activated in the preferences, WebWelder will stop 
 working when the TouchDesigner window is minimized.
+
+* If the connection between client and server goes through a firewall, TCP port 9980 will need to be 
+open. You can also try to change the port to 80 which is often allowed to let web traffic pass.
 
 ## Citing this Software in Research
 
